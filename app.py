@@ -21,6 +21,8 @@ app = Flask(__name__)
 def index():
     return render_template('index.html', name=name, movies=movies)
 
+    
+
 @app.route('/user/<name>')
 def user_page(name):
     appear = 'user is :' + name

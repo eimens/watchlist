@@ -36,13 +36,22 @@ def forge():
     db.session.commit()
     click.echo('Done..')
 
+@app.context_processor
+def inject_user():
+    user = Cuser.query.first()
+    return dict(user=user)
+
 @app.route('/')
+@app.route('/index')
 def index():
     user = Cuser.query.first()
     movie = Movie.query.all()
-    return render_template('index.html', name=user.name, movies=movie)
+    return render_template('index.html', movies=movie)
 
     
+@app.route('/hello') 
+def hello():
+    return 'hello eveyboday!'
 
 @app.route('/user/<name>')
 def user_page(name):
@@ -56,3 +65,8 @@ def test_url_for():
     print(url_for('user_page', name='peter'))
     print(url_for('test_url_for', num=2))
     return 'Test page'  
+
+@app.errorhandler(404)
+def page_not_found(e):
+    user = Cuser.query.first()
+    return render_template('404.html') 
